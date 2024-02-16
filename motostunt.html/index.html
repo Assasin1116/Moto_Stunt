@@ -1,166 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Motorcycle Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
 <body>
-<canvas id="myCanvas" width="800" height="400" style="border:1px solid #d3d3d3;"> Your browser does not support the HTML5 canvas tag.</canvas>
-<p id="score">Score: 0</p>
-<p id="speedIndicator">Speed: 0</p>
-<script>
-// Set the speed of the motorcycle
-const MAX_SPEED = 299;
-const ACCELERATION = 0.1; // Aceleración gradual
-const DECELERATION = 0.05; // Deceleración gradual
-
-// Obtain a reference to the canvas and its context
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-
-// Load the image using JavaScript
-var img = new Image();
-img.src = "moto.png";
-img.onload = function() {
-    // Set the initial position, speed, and angle of the motorcycle
-    var x = 50;
-    var y = 200;
-    var directionX = 0;
-    var directionY = 0;
-    var angle = 0;
-    var speed = 0; // Current speed of the motorcycle
-    var roundedSpeed = 0; // Rounded speed for display
-
-    // Set the score
-    var score = 0;
-
-    // Move the motorcycle
-    function moveMotorcycle() {
-    x += directionX * speed;
-    y += directionY * speed;
-
-    // Calcular la velocidad
-    if (directionX !== 0 || directionY !== 0) {
-        speed = Math.min(MAX_SPEED, speed + ACCELERATION); // Aumento gradual de la velocidad
-    } else {
-        speed = Math.max(0, speed - DECELERATION); // Decremento gradual de la velocidad
-    }
-
-    // Redondear la velocidad para mostrarla en el indicador
-    roundedSpeed = Math.round(speed);
-
-    // Update rotation angle based on speed
-    if (speed === 0) {
-        if (angle < 0) {
-            angle += DECELERATION * 2; // Gradually decrease angle when speed is 0
-        } else if (angle > 0) {
-            angle -= DECELERATION * 2; // Gradually decrease angle when speed is 0
-        }
-    }
-}
-
-
-    // Rotate the motorcycle
-    function rotateMotorcycle() {
-    if (speed > 0) {
-        if (angle < Math.PI / 2) {
-            angle -= ACCELERATION * 2; // Gradually increase angle when 'a' is pressed
-        }
-        if (angle >= Math.PI / 2 || angle <= -Math.PI / 2) {
-            resetGame(); // Reset the game if angle exceeds 90 degrees in either direction
-        }
-    } else if (speed === 0) {
-        if (angle > 0) {
-            angle -= DECELERATION * 2; // Gradually decrease angle when speed is 0
-        }
-        if (angle < 0) {
-            angle += DECELERATION * 2; // Gradually decrease angle when speed is 0
-        }
-    }
-}
-
-
-
-
-
-
-    // Reset the game
-    function resetGame() {
-        alert("Game Over! Restarting...");
-        x = 50;
-        y = 200;
-        directionX = 0;
-        directionY = 0;
-        angle = 0;
-        score = 0;
-        speed = 0;
-    }
-
-    // Listen for keydown events
-    window.addEventListener("keydown", function(event) {
-        switch (event.key) {
-            case "ArrowLeft":
-                directionX = -1;
-                break;
-            case "ArrowRight":
-                directionX = 1;
-                break;
-            case "ArrowUp":
-                directionY = -1;
-                break;
-            case "ArrowDown":
-                directionY = 1;
-                break;
-            case "a":
-                rotateMotorcycle();
-                break;
-        }
-    });
-
-    // Listen for keyup events
-    window.addEventListener("keyup", function(event) {
-        switch (event.key) {
-            case "ArrowLeft":
-            case "ArrowRight":
-                directionX = 0;
-                break;
-            case "ArrowUp":
-            case "ArrowDown":
-                directionY = 0;
-                break;
-        }
-    });
-
-    // Move the motorcycle and the road
-    function move() {
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw the road
-        ctx.fillStyle = "grey";
-        ctx.fillRect(0, 200, 800, 200);
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 250, 800, 50);
-
-        // Rotate and draw the motorcycle
-        ctx.save();
-        ctx.translate(x + 100, y + 100);
-        ctx.rotate(angle);
-        ctx.drawImage(img, -100, -100, 200, 200);
-        ctx.restore();
-
-        // Move the motorcycle
-        moveMotorcycle();
-
-        // Increment the score for each frame
-        score++;
-
-        // Update the score display
-        document.getElementById("score").innerHTML = "Score: " + score;
-
-        // Update the speed indicator display
-        document.getElementById("speedIndicator").innerHTML = "Speed: " + roundedSpeed;
-    }
-
-    // Call the move function repeatedly
-    setInterval(move, 1000 / 60); // 60 frames per second
-};
-</script>
+  <div id="app">
+    <canvas ref="canvas"></canvas>
+    <p id="score">Score: {{ score }}</p>
+    <p id="speedIndicator">Speed: {{ roundedSpeed }}</p>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

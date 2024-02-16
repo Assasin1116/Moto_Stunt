@@ -1,0 +1,23 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  #app {
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    height: 100%;
+  }
+  
+  canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #d3d3d3;
+  }
+  
+  #score, #speedIndicator {
+    font-family: Arial, sans-serif;
+  }
+  
